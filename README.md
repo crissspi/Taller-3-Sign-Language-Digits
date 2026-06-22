@@ -6,7 +6,7 @@ Este proyecto tiene como objetivo desarrollar un modelo de aprendizaje profundo 
 
 ## 📊 Dataset
 
-El proyecto utiliza una versión ya procesada del **Sign Language Digits Dataset**. Los archivos correspondientes se encuentran en la carpeta `dataset/Sign-language-digits-dataset/`:
+El proyecto utiliza una versión ya procesada del **Sign Language Digits Dataset** (https://www.kaggle.com/datasets/ardamavi/sign-language-digits-dataset). Los archivos correspondientes se encuentran en la carpeta `dataset/Sign-language-digits-dataset/`:
 
 *   **`X.npy`**: Contiene las imágenes preprocesadas (arreglos de NumPy).
 *   **`Y.npy`**: Contiene las etiquetas correspondientes (one-hot encoding).
