@@ -38,7 +38,7 @@ Hemos cubierto con éxito los Puntos 1, 2 y 3 solicitados en la rúbrica del tal
    - Se comprobó mediante un gráfico de barras que el dataset está **balanceado** (aprox. 205 imágenes por dígito), por lo que la red no tendrá sesgos.
 3. **Procesamiento de Datos:**
    - **Reshape:** Acondicionamos las imágenes a `(2062, 64, 64, 1)` para añadir el canal de color (escala de grises) que requiere la red convolucional.
-   - **Split:** Dividimos el dataset usando un 80% para entrenamiento (`train`) y 20% para prueba (`test`).
+   - **Split:** Dividimos el dataset usando un 70% para entrenamiento (`train`), 15% para validación (`val`) y 15% para prueba (`test`).
    - **Data Augmentation:** Configuramos un `ImageDataGenerator` que aplica ligeras rotaciones, zoom y desplazamientos a las imágenes para evitar que el modelo se sobreajuste (overfitting).
 
 ## ¿Cómo usar este avance?
@@ -46,8 +46,10 @@ Hemos cubierto con éxito los Puntos 1, 2 y 3 solicitados en la rúbrica del tal
 Para la **Fase 2 (El Modelo)** pueda trabajar sin problemas, hemos automatizado el puente entre ambos notebooks:
 
 1. Abre y ejecuta todas las celdas de `01_EDA_y_Procesamiento.ipynb`.
-2. Al llegar a la última celda, el código exportará automáticamente 4 archivos en la carpeta `dataset/`:
+2. Al llegar a la última celda, el código exportará automáticamente 6 archivos en la carpeta `dataset/`:
    - `X_train.npy`
+   - `X_val.npy`
    - `X_test.npy`
    - `Y_train.npy`
+   - `Y_val.npy`
    - `Y_test.npy`
