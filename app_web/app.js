@@ -8,20 +8,15 @@ const statusText = document.getElementById('status');
 
 let model;
 
-// 1. Cargar el modelo de TensorFlow.js
-// IMPORTANTE: Primero deben exportar el modelo desde Python (Keras) a tfjs.
-// Usar: tensorflowjs_converter --input_format keras modelo.keras ./tfjs_model
+// 1. Cargar el modelo real de TensorFlow.js
 async function loadModel() {
     try {
         statusText.innerText = "Cargando modelo...";
-        // Descomentar esta línea cuando tengan la carpeta del modelo generada:
-        // model = await tf.loadLayersModel('./tfjs_model/model.json');
+        // Ruta corregida a la carpeta que generaste
+        model = await tf.loadLayersModel('./modelo_tfjs/model.json');
         
-        // Simulando que cargó para fines de la interfaz base:
-        setTimeout(() => {
-            statusText.innerText = "Modelo cargado (Simulación). Listo para usar.";
-            startBtn.disabled = false;
-        }, 1000);
+        statusText.innerText = "Modelo cargado. Listo para usar.";
+        startBtn.disabled = false;
     } catch (error) {
         console.error("Error al cargar el modelo:", error);
         statusText.innerText = "Error cargando el modelo. Revisa la consola.";
@@ -49,41 +44,37 @@ async function setupWebcam() {
 
 // 3. Realizar la predicción
 async function predict() {
-    // if (!model) return; // Descomentar cuando el modelo real esté listo
+    // Validar que el modelo esté cargado
+    if (!model) return; 
     
     // a) Capturar el frame actual del video y convertirlo en un tensor
     const tfImg = tf.browser.fromPixels(video);
     
-    // b) Preprocesamiento (Ajustar según lo que hayan hecho en el Notebook)
-    // - Redimensionar a 64x64 (o el tamaño que hayan usado)
-    // - Convertir a escala de grises (si lo entrenaron así) o mantener RGB.
-    // - Normalizar (dividir por 255.0)
-    // - Expandir dimensiones (agregar la dimensión del batch: [1, 64, 64, 3])
-    
-    // Ejemplo (Ajustar según necesidad de su red neuronal):
+    // b) Preprocesamiento exacto para tu modelo (64x64 en escala de grises)
     const resized = tf.image.resizeBilinear(tfImg, [64, 64]);
-    const normalized = resized.div(255.0);
-    const batched = normalized.expandDims(0);
+    const gray = tf.image.rgbToGrayscale(resized); // Convertir a 1 canal (blanco y negro)
+    const normalized = gray.div(255.0); // Normalizar entre 0 y 1
+    const batched = normalized.expandDims(0); // Agregar dimensión de batch: [1, 64, 64, 1]
     
-    // c) Predecir
-    // const prediction = model.predict(batched);
-    // const classId = prediction.argMax(1).dataSync()[0];
+    // c) Ejecutar predicción real
+    const prediction = model.predict(batched);
+    const classId = prediction.argMax(1).dataSync()[0]; // Obtener el índice con mayor probabilidad
     
-    // Limpiar memoria
+    // Limpiar memoria de tensores (¡Muy importante en JS para que no se congele el navegador!)
     tfImg.dispose();
     resized.dispose();
+    gray.dispose();
     normalized.dispose();
     batched.dispose();
+    prediction.dispose();
     
-    // d) Mostrar resultado (simulado)
-    const simulatedPrediction = Math.floor(Math.random() * 10); // Simulación del 0 al 9
-    predictionBox.innerText = `Predicción: ${simulatedPrediction} (Simulado)`;
+    // d) Mostrar resultado real
+    predictionBox.innerText = `Predicción: ${classId}`;
 }
 
 // Event Listeners
 startBtn.addEventListener('click', setupWebcam);
 predictBtn.addEventListener('click', () => {
-    // En lugar de una sola predicción, también podrían hacer un bucle continuo usando requestAnimationFrame
     predict(); 
 });
 
