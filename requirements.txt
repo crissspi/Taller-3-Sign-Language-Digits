@@ -1,0 +1,11 @@
+# Librerías necesarias para el proyecto.
+# Se deben instalar estas dependencias dentro del entorno virtual activado usando el comando:
+# pip install -r requirements.txt
+
+jupyter
+gdown
+numpy
+opencv-python
+matplotlib
+scikit-learn
+tensorflow
