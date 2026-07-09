@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clasificador de Lenguaje de Señas (Dígitos)</title>
-    <!-- Importamos TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
-    <!-- Importamos OpenCV.js (opcional, útil si necesitan preprocesar la imagen como en Python) -->
     <script async src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -32,7 +30,8 @@
         </div>
     </div>
 
-    <!-- Archivo principal de lógica JS -->
+    <canvas id="canvas_oculto" width="64" height="64" style="border: 2px solid red; margin-top: 10px;"></canvas>
+    
     <script src="app.js"></script>
 </body>
 </html>
