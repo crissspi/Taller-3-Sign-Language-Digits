@@ -9,3 +9,4 @@ opencv-python
 matplotlib
 scikit-learn
 tensorflow
+pygame
