@@ -4,33 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clasificador de Lenguaje de Señas (Dígitos)</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection"></script>
+    
     <script async src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1>Sign Language Digits</h1>
-    <p class="subtitle">Clasificador usando Redes Neuronales Convolucionales (CNN)</p>
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <h2 id="status">Inicializando entorno gráfico...</h2>
+        <button id="start-app-btn" disabled>Probar Aplicación</button>
+    </div>
 
-    <div class="container">
-        <div id="status">Esperando cargar modelo...</div>
-        
-        <div class="video-container">
-            <video id="webcam" autoplay playsinline></video>
-        </div>
+    <div id="main-app" class="hidden">
+        <h1>Sign Language Digits</h1>
+        <p class="subtitle">Modo Práctica: Ejercita tus dígitos en ASL</p>
 
-        <div class="controls">
-            <button id="start-btn" disabled>Iniciar Cámara</button>
-            <button id="predict-btn" disabled>Predecir</button>
-        </div>
+        <div class="game-container">
+            <div class="left-panel">
+                <div class="video-container">
+                    <video id="webcam" autoplay playsinline></video>
+                </div>
+                <div id="prediction-box">Predicción: --</div>
+            </div>
 
-        <div id="prediction-box">
-            Predicción: --
+            <div class="right-panel">
+                <div class="challenge-card">
+                    <h3>Haz la seña para el número:</h3>
+                    <div id="target-number">?</div>
+                    <div class="feedback-badge" id="feedback">Buscando mano...</div>
+                    
+                    <div class="guide-image-container">
+                        <img id="guide-img" src="" alt="Guía Lenguaje de Señas" style="display:none; max-width:100%; height:auto;">
+                        <div id="image-placeholder">Cargando guía...</div>
+                    </div>
+                </div>
+                <button id="next-btn">Saltar Número</button>
+            </div>
         </div>
     </div>
 
-    <canvas id="canvas_oculto" width="64" height="64" style="border: 2px solid red; margin-top: 10px;"></canvas>
+    <canvas id="canvas_oculto" width="64" height="64" style="display: none;"></canvas>
     
     <script src="app.js"></script>
 </body>
