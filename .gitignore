@@ -9,9 +9,5 @@ env/
 # Ignorar archivos temporales de Jupyter
 .ipynb_checkpoints/
 
-# Ignorar los modelos pesados durante el desarrollo
-modelos/*.keras
-modelos/*.h5
-
 # Ignorar logs de métricas de TensorBoard
 logs/
