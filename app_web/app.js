@@ -3,7 +3,6 @@ const predictionBox = document.getElementById('prediction-box');
 const statusText = document.getElementById('status');
 const canvasOculto = document.getElementById('canvas_oculto'); 
 
-// Elementos de la nueva interfaz interactiva
 const loadingScreen = document.getElementById('loading-screen');
 const mainApp = document.getElementById('main-app');
 const startAppBtn = document.getElementById('start-app-btn');
@@ -17,18 +16,15 @@ let model;
 let handDetector;
 let isPredictingLive = false;
 let currentTargetNumber = 0;
-let successFrameCount = 0; // Para exigir que mantenga la seña un momento
+let successFrameCount = 0; 
 
-// Ruta a tus imágenes de guía (Crea una carpeta llamada 'img' y pon señas del 0 al 9)
-// Ej: img/asl_0.png, img/asl_1.png, etc.
-// Cambia esto en tu app.js si tus imágenes terminan en .jpg
+
 const GUIAS_IMAGENES = {
-    0: 'img/asl_0.jpg', 1: 'img/asl_1.jpg', 2: 'img/asl_2.jpg',
-    3: 'img/asl_3.jpg', 4: 'img/asl_4.jpg', 5: 'img/asl_5.jpg',
-    6: 'img/asl_6.jpg', 7: 'img/asl_7.jpg', 8: 'img/asl_8.jpg', 9: 'img/asl_9.jpg'
+    0: 'img/asl_0.JPG', 1: 'img/asl_1.JPG', 2: 'img/asl_2.JPG',
+    3: 'img/asl_3.JPG', 4: 'img/asl_4.JPG', 5: 'img/asl_5.JPG',
+    6: 'img/asl_6.JPG', 7: 'img/asl_7.JPG', 8: 'img/asl_8.JPG', 9: 'img/asl_9.JPG'
 };
 
-// 1. Cargar secuencialmente los modelos en segundo plano
 async function loadModel() {
     try {
         statusText.innerText = "Inicializando entorno gráfico (WebGL)...";
@@ -43,7 +39,6 @@ async function loadModel() {
         statusText.innerText = "Cargando clasificador de señas (CNN)...";
         model = await tf.loadGraphModel('./modelo_tfjs/model.json');
 
-        // Todo listo: Cambiar estado y activar el botón de entrada
         statusText.innerText = "Sistemas listos para producción.";
         startAppBtn.disabled = false;
     } catch (error) {
@@ -52,16 +47,14 @@ async function loadModel() {
     }
 }
 
-// 2. Flujo de inicio al presionar el botón "Probar Aplicación"
 async function iniciarFlujoAplicacion() {
-    loadingScreen.classList.add('hidden'); // Ocultar pantalla de carga
-    mainApp.classList.remove('hidden');    // Mostrar interfaz de juego
+    loadingScreen.classList.add('hidden'); 
+    mainApp.classList.remove('hidden');    
     
-    generarNuevoObjetivo(); // Elegir primer número aleatorio
-    await setupWebcam();    // Encender la cámara web
+    generarNuevoObjetivo(); 
+    await setupWebcam();    
 }
 
-// 3. Configurar y encender cámara web
 async function setupWebcam() {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -82,17 +75,14 @@ async function setupWebcam() {
     }
 }
 
-// 4. Lógica del juego: Generar número aleatorio del 0 al 9 y actualizar imagen guía
 function generarNuevoObjetivo() {
     successFrameCount = 0;
     feedbackBadge.innerText = "Buscando mano...";
     feedbackBadge.classList.remove('correct');
     
-    // Elegir número aleatorio
     currentTargetNumber = Math.floor(Math.random() * 10);
     targetNumberTxt.innerText = currentTargetNumber;
     
-    // Cambiar imagen de referencia
     if (GUIAS_IMAGENES[currentTargetNumber]) {
         guideImg.src = GUIAS_IMAGENES[currentTargetNumber];
         guideImg.style.display = 'block';
@@ -104,7 +94,6 @@ function generarNuevoObjetivo() {
     }
 }
 
-// 5. Controlador continuo del bucle de video
 async function ejecutarPrediccionEnVivo() {
     if (!isPredictingLive) return;
     try {
@@ -115,7 +104,6 @@ async function ejecutarPrediccionEnVivo() {
     requestAnimationFrame(ejecutarPrediccionEnVivo);
 }
 
-// 6. Procesamiento con OpenCV y validación interactiva
 async function predict() {
     if (!model || !handDetector || video.readyState < 2) return; 
 
@@ -163,7 +151,6 @@ async function predict() {
         let rect = new cv.Rect(Math.floor(rectX), Math.floor(rectY), Math.floor(rectSize), Math.floor(rectSize));
         cropped = src.roi(rect); 
 
-        // Procesamiento en escala de grises y ecualización (manteniendo el fondo original)
         gray = new cv.Mat();
         cv.cvtColor(cropped, gray, cv.COLOR_RGBA2GRAY); 
         cv.equalizeHist(gray, gray); 
@@ -172,7 +159,6 @@ async function predict() {
         cv.resize(gray, resized, new cv.Size(64, 64), 0, 0, cv.INTER_AREA);
         cv.imshow(canvasOculto, resized);
 
-        // Inferencia neuronal
         tf.tidy(() => {
             const tfImg = tf.browser.fromPixels(canvasOculto, 1);
             const floatImg = tf.cast(tfImg, 'float32');
@@ -185,14 +171,12 @@ async function predict() {
             
             predictionBox.innerText = `Predicción: ${classId}`;
 
-            // --- LÓGICA DE APRENDIZAJE / VALIDACIÓN INTERACTIVA ---
             if (hands && hands.length > 0) {
                 if (classId === currentTargetNumber) {
                     successFrameCount++;
                     feedbackBadge.innerText = `¡Correcto! Mantén la seña... (${successFrameCount}/15)`;
                     feedbackBadge.classList.add('correct');
 
-                    // Si sostiene la postura por 15 fotogramas continuos, avanza de número
                     if (successFrameCount >= 15) {
                         generarNuevoObjetivo();
                     }
@@ -218,7 +202,6 @@ async function predict() {
     }
 }
 
-// Vinculación de Eventos
 startAppBtn.addEventListener('click', iniciarFlujoAplicacion);
 nextBtn.addEventListener('click', generarNuevoObjetivo);
 window.onload = loadModel;
