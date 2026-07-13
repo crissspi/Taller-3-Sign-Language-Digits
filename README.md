@@ -2,29 +2,6 @@
 
 Proyecto que implementa un clasificador de lenguaje de señas (dígitos del 0 al 9) mediante Redes Neuronales Convolucionales (CNN), en cumplimiento con los requerimientos del Taller 3 de Inteligencia Artificial.
 
-## Estructura del Proyecto
-
-```text
-├── app_web/                       # Interfaz Front-End (HTML5, CSS3, JS)
-│   ├── modelo_tfjs/                # Directorio de despliegue para las capas web
-│   │   ├── model.json              # Topología de la red traducida
-│   │   └── group1-shard1of1.bin    # Pesos sinápticos binarios
-│   ├── app.js                      # Pipeline de inferencia asíncrona in-browser
-│   └── index.html                  # Interfaz de usuario para la cámara web
-├── dataset/                        # Repositorio de datos
-│   └── datos_procesados/           # Tensores unificados (.npy) generados en la Fase 1
-├── modelo_final/                   # Artefactos del modelo entrenado y pruebas
-│   ├── modelo_universal/            # Grafo matemático puro (SavedModel)
-│   │   ├── assets/
-│   │   ├── variables/
-│   │   └── saved_model.pb          # Binario universal libre de dependencias
-│   └── prediccion_local.py         # Script de inferencia nativa local con OpenCV
-├── notebooks/                      # Jupyter Notebooks de desarrollo y experimentación
-│   ├── 01_EDA_y_Procesamiento.ipynb
-│   └── 02_Entrenamiento_y_Evaluacion.ipynb
-└── requirements.txt                 # Manifiesto de dependencias del entorno virtual
-```
-
 ## Requisitos Previos e Instalación
 
 Para la correcta ejecución de los notebooks y scripts de este proyecto, se requiere configurar un entorno virtual e instalar las dependencias necesarias.
